@@ -9,7 +9,7 @@ OBJECTS=PhoneticFinder.o
 run: test
 	./$^
 
-test: TestRunner.o Test_ofek.o Test_snir.o $(OBJECTS)
+test: TestRunner.o Test_amir.o Test_snir.o $(OBJECTS)
 	$(CXX) $(CXXFLAGS) $^ -o test
 
 %.o: %.cpp $(HEADERS)

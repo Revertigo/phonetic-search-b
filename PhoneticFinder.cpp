@@ -78,7 +78,7 @@ namespace phonetic
                     //Check if there is a potential wrong character
                     if(curr_ch != token.at(i))
                     {
-                        auto exchange_vec = letters.at(curr_ch);
+                        auto exchange_vec = letters.at(curr_ch - ALIGN_ASCII);
                         bool found_char = false;
                         if(!exchange_vec.empty())
                         {
@@ -92,6 +92,11 @@ namespace phonetic
                                 }
                             }
                         }
+                        else
+                        {
+                            cout << "no match letter: " << curr_ch << endl;
+                        }
+                        
 
                         //If it's true, that means this is not the word we are searching for
                         if(!found_char)
@@ -105,11 +110,11 @@ namespace phonetic
                     }
                 }
 
-
                 if(counter_match_letters == token.length())
                 {
                     //We have a match !
                     target = token;
+                    break;
                 }
 
             }

@@ -33,5 +33,4 @@ solution*
 *.exe
 *.out
 *.app
-demo
-test
+/.vscode

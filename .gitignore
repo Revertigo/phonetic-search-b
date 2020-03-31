@@ -33,4 +33,6 @@ solution*
 *.exe
 *.out
 *.app
-/.vscode
+.idea
+CMakeLists.txt
+cmake-build-debug/

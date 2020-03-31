@@ -8,7 +8,7 @@
 using namespace std;
 
 #define ABC_SIZE 26
-#define ALIGN_ASCII 97 //How much to reduce from a char to get it's offset from start
+#define ALIGN_ASCII 'a' //How much to reduce from a char to get it's offset from start
 
 namespace phonetic
 {
@@ -92,11 +92,6 @@ namespace phonetic
                                 }
                             }
                         }
-                        else
-                        {
-                            cout << "no match letter: " << curr_ch << endl;
-                        }
-                        
 
                         //If it's true, that means this is not the word we are searching for
                         if(!found_char)
@@ -116,7 +111,6 @@ namespace phonetic
                     target = token;
                     break;
                 }
-
             }
         }
 

@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <stdexcept>
 #include <iostream>
+#include <vector>
 
 using namespace std;
 
@@ -12,6 +13,8 @@ using namespace std;
 
 namespace phonetic
 {
+    static inline void init_vectors(vector<vector<char>>  & letters);
+    
     //Initialize vector with all possible chars mistake exchange. Yea, call by reference... whatttt ?!?! what ?!?!?
     static inline void init_vectors(vector<vector<char>>  & letters)
     {

@@ -69,14 +69,16 @@ namespace phonetic
             {
                 //Because we don't want to destroy the original word lower cased word
                 string temp_word(word);
-
+                string lc_token(token);
+                //Lower case the token to search
+                transform(lc_token.begin(), lc_token.end(), lc_token.begin(), ::tolower);
                 int counter_match_letters = 0;
-                //Check wether the word could have bin the searched token
+                //Check whether the word could have bin the searched token
                 for(int i = 0; i < temp_word.length(); i++)
                 {
                     char curr_ch = temp_word.at(i);
                     //Check if there is a potential wrong character
-                    if(curr_ch != token.at(i))
+                    if(curr_ch != lc_token.at(i))
                     {
                         auto exchange_vec = letters.at(curr_ch - ALIGN_ASCII);
                         bool found_char = false;
@@ -84,7 +86,7 @@ namespace phonetic
                         {
                             for(int j = 0; j < exchange_vec.size(); j++)
                             {
-                                if(exchange_vec.at(j) == token.at(i))
+                                if(exchange_vec.at(j) == lc_token.at(i))
                                 {
                                     found_char = true;
                                     counter_match_letters++;

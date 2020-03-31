@@ -25,38 +25,38 @@ namespace phonetic
         vector<char> exchange_ou {'o', 'u'};
         vector<char> exchange_iy {'i', 'y'};
 
-        letters.insert(letters.begin() + 'v' - ALIGN_ASCII, exchange_vw);
-        letters.insert(letters.begin() + 'w' - ALIGN_ASCII, exchange_vw);
+        letters['v' - ALIGN_ASCII] = exchange_vw;
+        letters['w' - ALIGN_ASCII] = exchange_vw;
 
-        letters.insert(letters.begin() + 'p' - ALIGN_ASCII, exchange_pbf);
-        letters.insert(letters.begin() + 'b' - ALIGN_ASCII, exchange_pbf);
-        letters.insert(letters.begin() + 'f' - ALIGN_ASCII, exchange_pbf);
+        letters['p' - ALIGN_ASCII] = exchange_pbf;
+        letters['b' - ALIGN_ASCII] = exchange_pbf;
+        letters['f' - ALIGN_ASCII] = exchange_pbf;
 
-        letters.insert(letters.begin() + 'g' - ALIGN_ASCII, exchange_gj);
-        letters.insert(letters.begin() + 'j' - ALIGN_ASCII, exchange_gj);
+        letters['g' - ALIGN_ASCII] = exchange_gj;
+        letters['j' - ALIGN_ASCII] = exchange_gj;
 
-        letters.insert(letters.begin() + 'p' - ALIGN_ASCII, exchange_pbf);
-        letters.insert(letters.begin() + 'b' - ALIGN_ASCII, exchange_pbf);
-        letters.insert(letters.begin() + 'f' - ALIGN_ASCII, exchange_pbf);
+        letters['c' - ALIGN_ASCII] = exchange_ckq;
+        letters['k' - ALIGN_ASCII] = exchange_ckq;
+        letters['q' - ALIGN_ASCII] = exchange_ckq;
 
-        letters.insert(letters.begin() + 's' - ALIGN_ASCII, exchange_sz);
-        letters.insert(letters.begin() + 'z' - ALIGN_ASCII, exchange_sz);
-        
-        letters.insert(letters.begin() + 'd' - ALIGN_ASCII, exchange_dt);
-        letters.insert(letters.begin() + 't' - ALIGN_ASCII, exchange_dt);
+        letters['s' - ALIGN_ASCII] = exchange_sz;
+        letters['z' - ALIGN_ASCII] = exchange_sz;
 
-        letters.insert(letters.begin() + 'o' - ALIGN_ASCII, exchange_ou);
-        letters.insert(letters.begin() + 'u' - ALIGN_ASCII, exchange_ou);
+        letters['d' - ALIGN_ASCII] = exchange_dt;
+        letters['t' - ALIGN_ASCII] = exchange_dt;
 
-        letters.insert(letters.begin() + 'i' - ALIGN_ASCII, exchange_iy);
-        letters.insert(letters.begin() + 'y' - ALIGN_ASCII, exchange_iy);
+        letters['o' - ALIGN_ASCII] = exchange_ou;
+        letters['u' - ALIGN_ASCII] = exchange_ou;
+
+        letters['i' - ALIGN_ASCII] = exchange_iy;
+        letters['y' - ALIGN_ASCII] = exchange_iy;
     }
     
     string find(string text, string word)
     {
         vector<vector<char>> letters(ABC_SIZE);//For all abc letters
         init_vectors(letters);
-        istringstream iss(text);//Initialize streamstring like split
+        istringstream iss(text);//Initialize istreamstring for split
         string token;
         string target = "";
 

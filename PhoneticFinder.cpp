@@ -9,16 +9,75 @@
 using namespace std;
 
 #define ABC_SIZE 26
-#define ALIGN_ASCII 'a' //How much to reduce from a char to get it's offset from start
+#define ALIGN_ASCII 'a' //How much to reduce from 'a' char to get it's offset from start
 
 namespace phonetic
 {
-    static inline void init_vectors(vector<vector<char>>  & letters);
-    
-    //Initialize vector with all possible chars mistake exchange. Yea, call by reference... whatttt ?!?! what ?!?!?
-    static inline void init_vectors(vector<vector<char>>  & letters)
+    static void init_vectors(vector<vector<char>>  & letters);
+    static int check_single_token(vector<vector<char>>  & letters ,string token, string word);
+    static bool check_mistake(vector<char> exchange_vec, char curr);
+    static void handle_word_not_found(string target);
+
+
+    static void handle_word_not_found(string target, string word)
     {
-        //I have no choice but to inline it or otherwise all vectors will be popout of stack at the end of the function.
+        if(target == "")
+        {
+            //Let's format an output message !
+            ostringstream oss;
+            oss << "No such word " << word << endl;
+            string output = oss.str();
+            throw invalid_argument(output);
+        }
+    }
+
+    static bool check_mistake(vector<char> exchange_vec, char curr)
+    {
+        //Check if there is a potential character that could match the current character from the token
+        bool found_char = false;
+        if(!exchange_vec.empty())
+        {
+            for(int j = 0; j < exchange_vec.size(); j++)
+            {
+                if(exchange_vec.at(j) == curr)
+                {
+                    found_char = true;
+                    break;
+                }
+            }
+        }
+
+        return found_char;
+    }
+
+    static int check_single_token(vector<vector<char>>  & letters ,string token, string word)
+    {
+        int counter_match_letters = 0;
+        //Lower case the token to search
+        transform(token.begin(), token.end(), token.begin(), ::tolower);
+        bool found_char = true;
+        for(int i = 0; i < word.length() && found_char; i++)
+        {
+            char curr_ch = word.at(i);
+
+            //Only if the letters are equals, or there is other char that typed wrong(v instead of w etc) we increment counter
+            if(curr_ch == token.at(i) || check_mistake(letters.at(curr_ch - ALIGN_ASCII), token.at(i)))
+            {
+                //Check if there is a potential to find a char which equals to token.at(i)
+                counter_match_letters++;
+            }
+            else//If they are equals, moves to the next letter
+            {
+                found_char = false;
+            }
+        }
+
+        return counter_match_letters;
+    }
+
+    //Initialize vector with all possible chars mistake exchange. Yea, call by reference... whatttt ?!?! what ?!?!?
+    static void init_vectors(vector<vector<char>>  & letters)
+    {
         vector<char> exchange_vw {'v', 'w'};
         vector<char> exchange_pbf {'p', 'b', 'f'};
         vector<char> exchange_gj {'g', 'j'};
@@ -28,6 +87,7 @@ namespace phonetic
         vector<char> exchange_ou {'o', 'u'};
         vector<char> exchange_iy {'i', 'y'};
 
+        //Copy assignment operator(takes a lvalue as an argument, while move constructor takes rvalue)
         letters['v' - ALIGN_ASCII] = exchange_vw;
         letters['w' - ALIGN_ASCII] = exchange_vw;
 
@@ -65,69 +125,23 @@ namespace phonetic
 
         //Lower case the word to search
         transform(word.begin(), word.end(), word.begin(), ::tolower);
-        while(iss >> token)
+        while(iss >> token && target == "")
         {
             //Strings needs to be in the same length in order to be candidate
             if(token.length() == word.length())
             {
-                //Because we don't want to destroy the original word lower cased word
-                string temp_word(word);
-                string lc_token(token);
-                //Lower case the token to search
-                transform(lc_token.begin(), lc_token.end(), lc_token.begin(), ::tolower);
-                int counter_match_letters = 0;
-                //Check whether the word could have bin the searched token
-                for(int i = 0; i < temp_word.length(); i++)
-                {
-                    char curr_ch = temp_word.at(i);
-                    //Check if there is a potential wrong character
-                    if(curr_ch != lc_token.at(i))
-                    {
-                        auto exchange_vec = letters.at(curr_ch - ALIGN_ASCII);
-                        bool found_char = false;
-                        if(!exchange_vec.empty())
-                        {
-                            for(int j = 0; j < exchange_vec.size(); j++)
-                            {
-                                if(exchange_vec.at(j) == lc_token.at(i))
-                                {
-                                    found_char = true;
-                                    counter_match_letters++;
-                                    break;
-                                }
-                            }
-                        }
-
-                        //If it's true, that means this is not the word we are searching for
-                        if(!found_char)
-                        {
-                            break;
-                        }
-                    }
-                    else//If they are equals, moves to the next letter
-                    {
-                        counter_match_letters++;
-                    }
-                }
+                //Check whether the word could be the searched token
+                int counter_match_letters = check_single_token(letters, token, word);
 
                 if(counter_match_letters == token.length())
                 {
-                    //We have a match !
+                    //We have a match ! this is the word we were looking for
                     target = token;
-                    break;
                 }
             }
         }
 
-        if(target == "")
-        {
-            //Let's format an output message !
-            ostringstream oss;
-            oss << "No such word " << word << endl;
-            string output = oss.str();
-            throw invalid_argument(output);
-        }
-
+        handle_word_not_found(target, word);
         return target;
     }
 }
